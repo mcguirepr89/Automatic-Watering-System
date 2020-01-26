@@ -19,7 +19,7 @@ SOIL SENSOR (A1)
 #define SCREEN_HEIGHT 32
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1); //Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 
-//Relay
+//Relay 
 #define relayS 7
 
 //Rotary Encoder
@@ -30,7 +30,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1); //Declaration 
 #define analogInPin A1
 
 //Integer Variables
-int dryValue;
+int dryValue = 70;
 int aState;
 int aLastState;
 int sensorValue;
@@ -45,7 +45,7 @@ void setup() {
     for (;;);
   }
   delay(2000);
-  display.setRotation(2);
+  //display.setRotation(2);
   display.clearDisplay();
   display.setTextColor(WHITE);
   
@@ -61,139 +61,35 @@ void setup() {
 
 
 void loop() {
-  delay(500); Just slowing shit down   
+  delay(500); //Just slowing shit down   
   
   //Instantiate the soil sensor and adjust for some shit
-  int t = analogRead(analogInPin) / 10 +12
+  int t = analogRead(analogInPin) / 10 +12;
+  
   if (isnan(t)) {
     Serial.println("Failed to read soil!");
   }
   Serial.print("soil sensor = " );
   Serial.println(t);
   
-  //Watering loop = set to water for 6.5 seconds; each block is .5 seconds
+  //Watering loop = set to water for 6 seconds
   if ( t <= dryValue ) {
     digitalWrite(relayS, HIGH);                       //Turn on the pump
     
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
+    display.clearDisplay();                           //Display "Watering" before the ellipses loop
     display.setTextSize(2);
     display.setCursor(0, 3);
     display.print("Watering");
     display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering.");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering..");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering...");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering....");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering.....");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering......");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering.......");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering........");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering.........");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering..........");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering...........");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering............");
-    display.display();
     
-
-    digitalWrite(relayS, LOW);                           //Turn off the pump
+    for ( int s = 0; s <= 6; s++) {                   //Water and run ellipses for s<= #OFSECONDS
+    Serial.print("Watering . . . ");
+    delay(1000);
+    display.print(".");
+    display.display();    
+    }
+    
+    digitalWrite(relayS, LOW);                         //Turn off the pump
   }
 
 
