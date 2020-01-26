@@ -61,11 +61,11 @@ void setup() {
 
 
 void loop() {
-  delay(500); //Just slowing shit down
+  delay(250); //Just slowing shit down
 
   //Instantiate the soil sensor and adjust for some shit
   int t = analogRead(analogInPin) / 10 + 12;
-
+  int s = 0;
   if (isnan(t)) {
     Serial.println("Failed to read soil!");
   }
@@ -74,7 +74,6 @@ void loop() {
 
   //Watering loop = set to water for 6 seconds
   if ( t <= dryValue ) {
-    digitalWrite(relayS, HIGH);                       //Turn on the pump
 
     display.clearDisplay();                           //Display "Watering" before the ellipses loop
     display.setTextSize(2);
@@ -82,9 +81,9 @@ void loop() {
     display.print("Watering");
     display.display();
 
-    for ( int s = 0; s <= 6; s++) {                   //Water and run ellipses for s<= #OFSECONDS
+    for ( s = dryValue; s <= dryValue; digitalWrite(relayS, HIGH)) {
       Serial.print("Watering . . . ");
-      delay(1000);
+      delay(500);
       display.print(".");
       display.display();
     }
@@ -92,30 +91,26 @@ void loop() {
     digitalWrite(relayS, LOW);                         //Turn off the pump
   }
 
-
-  //Normal display loop
-  for ( int s = 0; s <= 20; s++) {                //Sets how long to wait before the next watering loop is checked
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Soil: ");
-    display.setTextSize(2);
-    display.setCursor(70, 3);
-    if ( t >= 100 ) {
-      display.print("100%");
-    } else {
-      display.print(t);
-      display.print("%");
-    }
-    display.setTextSize(1.5);
-    display.setCursor(0, 22);
-    display.print("Watering trigger: ");
-    display.setCursor(109, 22);
-    display.print(dryValue);
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setCursor(0, 3);
+  display.print("Soil: ");
+  display.setTextSize(2);
+  display.setCursor(70, 3);
+  if ( t >= 100 ) {
+    display.print("100%");
+  } else {
+    display.print(t);
     display.print("%");
-    display.display();
-    delay(1000);
   }
+  display.setTextSize(1.5);
+  display.setCursor(0, 22);
+  display.print("Watering trigger: ");
+  display.setCursor(109, 22);
+  display.print(dryValue);
+  display.print("%");
+  display.display();
+
 }
 
 
