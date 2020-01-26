@@ -31,7 +31,6 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1); //Declaration 
 
 //Integer Variables
 int dryValue;
-int counter;
 int aState;
 int aLastState;
 int sensorValue;
@@ -63,8 +62,6 @@ void setup() {
 
 void loop() {
   delay(500); Just slowing shit down   
-  
-  dryValue = counter;//Sets whatever is set using the rotary encoder
   
   //Instantiate the soil sensor and adjust for some shit
   int t = analogRead(analogInPin) / 10 +12
@@ -220,7 +217,7 @@ void loop() {
   display.setCursor(0, 22);
   display.print("Watering trigger: ");
   display.setCursor(109, 22);
-  display.print(counter);
+  display.print(dryValue);
   display.print("%");
   display.display();
 
@@ -242,7 +239,7 @@ void loop() {
   display.setCursor(0, 22);
   display.print("Watering trigger: ");
   display.setCursor(109, 22);
-  display.print(counter);
+  display.print(dryValue);
   display.print("%");
   display.display();
 
@@ -264,7 +261,7 @@ void loop() {
   display.setCursor(0, 22);
   display.print("Watering trigger: ");
   display.setCursor(109, 22);
-  display.print(counter);
+  display.print(dryValue);
   display.print("%");
   display.display();
 
@@ -273,7 +270,7 @@ void loop() {
 }
 
 
-//Wetset interrupt loop to set the 'counter' variable for the watering trigger
+//Wetset interrupt loop to set the 'dryValue' variable for the watering trigger
 void wetset() {
   {
   volatile static unsigned long last_interrupt_time = 0;
@@ -283,17 +280,17 @@ void wetset() {
     aState = digitalRead(rotaryA);
   if (aState != aLastState) {
     if (digitalRead(rotaryB) != aState) {
-      if (counter >= 1) {
-        counter --;
+      if (dryValue >= 1) {
+        dryValue --;
       }
     } else {
-      if (counter <= 99) {
+      if (dryValue <= 99) {
 
-        counter ++;
+        dryValue ++;
       }
     }
     Serial.print("Watering trigger: ");
-    Serial.println(counter);
+    Serial.println(dryValue);
   }
   aLastState = aState;
   }
