@@ -1,11 +1,14 @@
 # Patrick McGuire's first good thing
 This is my first attempt at documenting my tinkering. This project was inspired by and made for my best friend, Jerry Vance. He's the inspiration, generation, and motivation to get this done. Many thanks to Susan Mackey for her help in making this possible......
-
+  
+  - Arduino Nano
   - OLED Display (module)
   - Rotary Encoder (no module)
   - 5v Relay Switch (module)
   - 5v Water Pump (just a pump)
   - Soil Sensor (no module)
+  
+The basic idea is that this is a soil sensor that will show you soil saturation. If you set the watering trigger, the system will power on a water pump that will water the soil that is being measure with the sensor. This feedback loop will allow you to keep soil at a moisture level set by the watering trigger.
 
 # Assembly and Schematics
 
