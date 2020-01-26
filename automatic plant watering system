@@ -1,193 +1,95 @@
-//Libraries
+/* Patrick McGuire -- 01/26/2020
+Automatic Watering System
+Hardware: 
+OLED DISPLAY (data=A4, clock=A5)
+5v RELAY (signal=D7, switching power to pump)
+5v WATER PUMP
+ROTARY ENCODER (a=D8, b=D2) 
+SOIL SENSOR (A1)
+*/
+
+//Including Libraries
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-//OLED specs
+//Defining Hardware
+//OLED
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 32
-//Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1); //Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 
-//Relay pin settings
+//Relay 
 #define relayS 7
 
-//Rotary encoder pin settings
+//Rotary Encoder
 #define rotaryA 8
 #define rotaryB 2
 
-//Soil sensor pin settings
+//Soil Sensor
 #define analogInPin A1
 
-//Variables
-int dryValue;
-int counter;
+//Integer Variables
+int dryValue = 70;
 int aState;
 int aLastState;
 int sensorValue;
 
+
+//Setup in the same order as above
 void setup() {
-  pinMode (rotaryA, INPUT);
-  pinMode (rotaryB, INPUT);
-
-  pinMode(relayS, OUTPUT);
-
+  //OLED
   Serial.begin(115200);
-  
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     Serial.println(F("SSD1306 allocation failed"));
     for (;;);
   }
   delay(2000);
-  display.setRotation(2);
+  //display.setRotation(2);
   display.clearDisplay();
   display.setTextColor(WHITE);
-
+  
+  //Relay
+  pinMode(relayS, OUTPUT);
+  
+  //Rotary Encoder
+  pinMode (rotaryA, INPUT);
+  pinMode (rotaryB, INPUT);
   aLastState = digitalRead(rotaryA);
   attachInterrupt(digitalPinToInterrupt(rotaryB), wetset, CHANGE);
 }
 
 
 void loop() {
-  delay(500);
-  dryValue = counter;
-
-
-  //Instantiate the soil sensor
+  delay(500); //Just slowing shit down   
+  
+  //Instantiate the soil sensor and adjust for some shit
   int t = analogRead(analogInPin) / 10 +12;
-
+  
   if (isnan(t)) {
     Serial.println("Failed to read soil!");
   }
   Serial.print("soil sensor = " );
   Serial.println(t);
-
-
-
-  //Watering trigger loop
+  
+  //Watering loop = set to water for 6 seconds
   if ( t <= dryValue ) {
-    digitalWrite(relayS, HIGH);
+    digitalWrite(relayS, HIGH);                       //Turn on the pump
     
-    
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
+    display.clearDisplay();                           //Display "Watering" before the ellipses loop
     display.setTextSize(2);
     display.setCursor(0, 3);
     display.print("Watering");
     display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering.");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering..");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering...");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering....");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering.....");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering......");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering.......");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering........");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering.........");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering..........");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering...........");
-    display.display();
-
-    Serial.print("Soil sensor level: ");
-    Serial.println(t);
-    delay(500);
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 3);
-    display.print("Watering............");
-    display.display();
     
-
-    digitalWrite(relayS, LOW);
+    for ( int s = 0; s <= 6; s++) {                   //Water and run ellipses for s<= #OFSECONDS
+    Serial.print("Watering . . . ");
+    delay(1000);
+    display.print(".");
+    display.display();    
+    }
+    
+    digitalWrite(relayS, LOW);                         //Turn off the pump
   }
 
 
@@ -211,7 +113,7 @@ void loop() {
   display.setCursor(0, 22);
   display.print("Watering trigger: ");
   display.setCursor(109, 22);
-  display.print(counter);
+  display.print(dryValue);
   display.print("%");
   display.display();
 
@@ -233,7 +135,7 @@ void loop() {
   display.setCursor(0, 22);
   display.print("Watering trigger: ");
   display.setCursor(109, 22);
-  display.print(counter);
+  display.print(dryValue);
   display.print("%");
   display.display();
 
@@ -255,7 +157,7 @@ void loop() {
   display.setCursor(0, 22);
   display.print("Watering trigger: ");
   display.setCursor(109, 22);
-  display.print(counter);
+  display.print(dryValue);
   display.print("%");
   display.display();
 
@@ -264,7 +166,7 @@ void loop() {
 }
 
 
-//Wetset interrupt loop to set the 'counter' variable for the watering trigger
+//Wetset interrupt loop to set the 'dryValue' variable for the watering trigger
 void wetset() {
   {
   volatile static unsigned long last_interrupt_time = 0;
@@ -274,17 +176,17 @@ void wetset() {
     aState = digitalRead(rotaryA);
   if (aState != aLastState) {
     if (digitalRead(rotaryB) != aState) {
-      if (counter >= 1) {
-        counter --;
+      if (dryValue >= 1) {
+        dryValue --;
       }
     } else {
-      if (counter <= 99) {
+      if (dryValue <= 99) {
 
-        counter ++;
+        dryValue ++;
       }
     }
     Serial.print("Watering trigger: ");
-    Serial.println(counter);
+    Serial.println(dryValue);
   }
   aLastState = aState;
   }
