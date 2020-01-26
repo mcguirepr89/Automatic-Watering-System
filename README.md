@@ -7,10 +7,10 @@ The basic idea is that there is a homemade "soil sensor" that reads a soil water
 The hardware:
 
   OLED Display
-  5v Relay Switch (module)
-  5v Water Pump
-  Rotary Encoder (no module)
-  Soil Sensor (no module)
+  \5v Relay Switch (module)
+  \5v Water Pump
+  \Rotary Encoder (no module)
+  \Soil Sensor (no module)
   
 The OLED is defined as I2C, so the data and clock are connected to the A4 and A5 analog pins, respectively.
 The Relay's signal is read from the D7 digital pin.
