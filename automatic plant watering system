@@ -1,39 +1,46 @@
-//Libraries
+/*
+Automatic Watering System
+Hardware: 
+OLED DISPLAY (data=A4, clock=A5)
+5v RELAY (signal=D7, switching power to pump)
+5v WATER PUMP
+ROTARY ENCODER (a=D8, b=D2) 
+SOIL SENSOR (A1)
+*/
+
+//Including Libraries
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-//OLED specs
+//Defining Hardware
+//OLED
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 32
-//Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1); //Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 
-//Relay pin settings
+//Relay
 #define relayS 7
 
-//Rotary encoder pin settings
+//Rotary Encoder
 #define rotaryA 8
 #define rotaryB 2
 
-//Soil sensor pin settings
+//Soil Sensor
 #define analogInPin A1
 
-//Variables
+//Integer Variables
 int dryValue;
 int counter;
 int aState;
 int aLastState;
 int sensorValue;
 
+
+//Setup in the same order as above
 void setup() {
-  pinMode (rotaryA, INPUT);
-  pinMode (rotaryB, INPUT);
-
-  pinMode(relayS, OUTPUT);
-
+  //OLED
   Serial.begin(115200);
-  
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     Serial.println(F("SSD1306 allocation failed"));
     for (;;);
@@ -42,32 +49,34 @@ void setup() {
   display.setRotation(2);
   display.clearDisplay();
   display.setTextColor(WHITE);
-
+  
+  //Relay
+  pinMode(relayS, OUTPUT);
+  
+  //Rotary Encoder
+  pinMode (rotaryA, INPUT);
+  pinMode (rotaryB, INPUT);
   aLastState = digitalRead(rotaryA);
   attachInterrupt(digitalPinToInterrupt(rotaryB), wetset, CHANGE);
 }
 
 
 void loop() {
-  delay(500);
-  dryValue = counter;
-
-
-  //Instantiate the soil sensor
-  int t = analogRead(analogInPin) / 10 +12;
-
+  delay(500); Just slowing shit down   
+  
+  dryValue = counter;//Sets whatever is set using the rotary encoder
+  
+  //Instantiate the soil sensor and adjust for some shit
+  int t = analogRead(analogInPin) / 10 +12
   if (isnan(t)) {
     Serial.println("Failed to read soil!");
   }
   Serial.print("soil sensor = " );
   Serial.println(t);
-
-
-
-  //Watering trigger loop
+  
+  //Watering loop = set to water for 6.5 seconds; each block is .5 seconds
   if ( t <= dryValue ) {
-    digitalWrite(relayS, HIGH);
-    
+    digitalWrite(relayS, HIGH);                       //Turn on the pump
     
     Serial.print("Soil sensor level: ");
     Serial.println(t);
@@ -187,7 +196,7 @@ void loop() {
     display.display();
     
 
-    digitalWrite(relayS, LOW);
+    digitalWrite(relayS, LOW);                           //Turn off the pump
   }
 
 
