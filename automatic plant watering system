@@ -1,4 +1,4 @@
-/*
+/* Patrick McGuire -- 01/26/2020
 Automatic Watering System
 Hardware: 
 OLED DISPLAY (data=A4, clock=A5)
