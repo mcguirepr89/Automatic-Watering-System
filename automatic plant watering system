@@ -45,7 +45,7 @@ void setup() {
     for (;;);
   }
   delay(2000);
-  //display.setRotation(2);
+  //display.setRotation(2);              //Can be used to flib the OLED display 180 degrees
   display.clearDisplay();
   display.setTextColor(WHITE);
 
