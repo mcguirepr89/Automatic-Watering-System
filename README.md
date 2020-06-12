@@ -28,7 +28,6 @@ Tod>Power Supply]-->U(Power Rail/GND)
 U --> V[Modules]
 V --> W{Micro-<br/>controller}
 W --> X((Resistors))
-[Modules]
 ```
 
 
