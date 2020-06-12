@@ -21,43 +21,65 @@ The basic idea is that this is a soil sensor that will show you soil saturation.
   - The Relay's signal is read from the D7 digital pin.
   - The soil sensor is a homemade slice of the pie. Basically, there are two soil probes that will go into the soil about 1" apart about 2" into the soil. One of the probes is hooked directly to the +5v power rail. The other probe is hooked up to the A1 analog pin AND has a path to ground that is resisted with 10K Ohms.
 
+### Shape Key
+```mermaid
+graph LR
+Tod>Power Supply]-->U(Power Rail/GND)
+U --> V[Modules]
+V --> W{Micro-<br/>controller}
+W --> X((Resistors))
+[Modules]
+```
+
+
 
 ```mermaid
 graph LR
 
-%% Vinput
-God>USB] 
-God --> E
-F --> God
-
-%% Power rails
-E(5V)
-E --D+--> A
-E --Common--> A
-E --D+--> B
-E --D+--> C
-E --Vin--> D
-E --> H
-F(GND)
-A --> F
-B --> F
-C --> F
-D --> F
-H --10KOhm--> F
-I --> F
 %% Modules
-A[Relay]
-A --5v--> I
-B[OLED] 
-C[Rotary Encoder]
-H[Soil Probe] 
+%% Vinput
+Uod>USB] 
+Uod --> V
+G --> Uod
+R[Relay]
+R --5v--> I
+O[OLED] 
+RE[Rotary<br/>Encoder]
+SP[Soil Probe]
+R1 --A1--> A
+SP --> R1
+SP --> S
+SP --> S 
 I[Water Pump]
+S[Soil]
 %% Microcontroller board
-D{Arduino}
-A -- D7 --> D
-B -- A4 --> D
-B -- A5 --> D
-C -- D2 --> D
-C -- D8 --> D
-D -- A1 --> H
+A{Arduino}
+R -- D7 --> A
+O -- A4 --> A
+O -- A5 --> A
+R2 -- D2 --> A
+R3 -- D8 --> A
+RE--> R2
+RE --> R3
+%% Resistor Nodes
+R1((R1))
+R2((R2))
+R3((R3))
+%% Power rails
+V(5V)
+V --D+--> R
+V --Common--> R
+V --D+--> O
+V --> R2
+V --> R3
+V --Vin--> A
+V --> SP
+G(GND)
+R --> G
+O --> G
+RE --> G
+RE --> G
+A --> G
+I --> G
+R1 --> G
 ```
