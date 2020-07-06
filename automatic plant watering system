@@ -30,7 +30,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1); //Declaration 
 #define analogInPin A1
 
 //Integer Variables
-int dryValue = 70;
+int dryValue = 0;
 int aState;
 int aLastState;
 int sensorValue;
@@ -64,8 +64,7 @@ void loop() {
   delay(250); //Just slowing shit down
 
   //Instantiate the soil sensor and adjust for some shit
-  int t = analogRead(analogInPin) / 10 + 12;
-  int s = 0;
+  int t = (analogRead(analogInPin) / 10 + 12);
   if (isnan(t)) {
     Serial.println("Failed to read soil!");
   }
@@ -81,8 +80,9 @@ void loop() {
     display.print("Watering");
     display.display();
 
-    for ( s = dryValue; s <= dryValue; digitalWrite(relayS, HIGH)) {
-      Serial.print("Watering . . . ");
+    for (int t = (analogRead(analogInPin) / 10 + 12); t <= dryValue; digitalWrite(relayS, HIGH)) {
+      t = (analogRead(analogInPin) / 10 + 12);
+      Serial.print(t);
       delay(500);
       display.print(".");
       display.display();
